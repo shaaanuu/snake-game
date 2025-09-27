@@ -70,10 +70,12 @@ int main() {
   wrefresh(win);
 
   // moving logic
-  usleep(500000);
-  move_snake();
-  draw_everything(win);
-  wrefresh(win);
+  while(true) {
+    usleep(500000);
+    move_snake();
+    draw_everything(win);
+    wrefresh(win);
+  }
 
   getch();
   endwin();
