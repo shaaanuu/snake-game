@@ -83,7 +83,6 @@ int main() {
   wrefresh(win);
 
   // moving logic
-  int i = 0;
   int dx = 1, dy = 0;
   while(true) {
     usleep(500000);
@@ -100,8 +99,6 @@ int main() {
     snake_move(dx, dy);
     draw_everything(win);
     wrefresh(win);
-
-    i++;
   }
 
   draw_everything(win);
