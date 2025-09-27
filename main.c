@@ -75,6 +75,7 @@ int main() {
   curs_set(0);
   cbreak();
   refresh();
+  nodelay(stdscr, TRUE);
 
   WINDOW *win = newwin(20, 50, 1, 1);
   init_snake();
@@ -83,18 +84,20 @@ int main() {
 
   // moving logic
   int i = 0;
+  int dx = 1, dy = 0;
   while(true) {
     usleep(500000);
 
     int ch = getch();
     switch(ch) {
-      case KEY_UP: snake_move(0,-1); break;
-      case KEY_DOWN: snake_move(0,1);  break;
-      case KEY_LEFT: snake_move(-1,0); break;
-      case KEY_RIGHT: snake_move(1,0);  break;
+      case KEY_UP: dx=0; dy=-1; break;
+      case KEY_DOWN: dx=0; dy=1;  break;
+      case KEY_LEFT: dx=-1; dy=0; break;
+      case KEY_RIGHT: dx=1; dy=0;  break;
       case 'q': endwin(); exit(0); break;
     }
-    
+   
+    snake_move(dx, dy);
     draw_everything(win);
     wrefresh(win);
 
