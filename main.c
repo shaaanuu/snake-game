@@ -83,17 +83,18 @@ int main() {
 
   // moving logic
   int i = 0;
-  while(i <= 10) {
+  while(true) {
     usleep(500000);
-    if(i < 3){
-      snake_move(1,0);
-    } else if (i < 5) {
-      snake_move(0,1);
-    } else if (i < 7) {
-      snake_move(-1, 0);
-    } else {
-      snake_move(0, -1);
+
+    int ch = getch();
+    switch(ch) {
+      case KEY_UP: snake_move(0,-1); break;
+      case KEY_DOWN: snake_move(0,1);  break;
+      case KEY_LEFT: snake_move(-1,0); break;
+      case KEY_RIGHT: snake_move(1,0);  break;
+      case 'q': endwin(); exit(0); break;
     }
+    
     draw_everything(win);
     wrefresh(win);
 
