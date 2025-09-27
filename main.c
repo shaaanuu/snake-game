@@ -6,13 +6,19 @@
 struct Node {
   int x, y;
   struct Node* next;
-} *head = NULL;
+} *head = NULL, *current, *new_node;
+
+int old_x, old_y;
+int temp_x, temp_y;
+int first;
 
 void add_segment(int x, int y) {
-  struct Node* new_node = malloc(sizeof(struct Node));
+  new_node = malloc(sizeof(struct Node));
+
   new_node->x = x;
   new_node->y = y;
   new_node->next = head;
+
   head = new_node;
 }
 
@@ -27,8 +33,8 @@ void draw_everything(WINDOW* win) {
   wclear(win);
   box(win, 0, 0);
 
-  struct Node* current = head;
-  int first = 1;
+  current = head;
+  first = 1;
   while(current != NULL) {
     // mvwaddch(WINDOW *win, int y, int x, const chtype ch);
     mvwaddch(win, current->y, current->x, first ? '@' : 'o');
@@ -37,13 +43,29 @@ void draw_everything(WINDOW* win) {
   }
 }
 
-void move_snake() {
-  struct Node* current = head;
-  while(current != NULL) {
-    current->x = current->x+1;
+void snake_move(int x,int y){
+    current = head;
+
+    old_x = current->x;
+    old_y = current->y;
+
+    current->x += x; 
+    current->y += y;
 
     current = current->next;
-  }
+
+    while(current != NULL){
+        temp_x = current->x;
+        temp_y = current->y;
+
+        current->x = old_x;
+        current->y = old_y;
+
+        old_x = temp_x;
+        old_y = temp_y;
+
+        current = current->next;
+    }
 }
 
 int main() {
@@ -52,30 +74,34 @@ int main() {
   keypad(stdscr, TRUE);
   curs_set(0);
   cbreak();
-
   refresh();
 
   WINDOW *win = newwin(20, 50, 1, 1);
   init_snake();
-
-  draw_everything(win);
-
-  //refresh();  // draw stdscr background
-  wrefresh(win);
-
-  // adding the body logic
-  usleep(500000);
-  add_segment(9,7);
   draw_everything(win);
   wrefresh(win);
 
   // moving logic
-  while(true) {
+  int i = 0;
+  while(i <= 10) {
     usleep(500000);
-    move_snake();
+    if(i < 3){
+      snake_move(1,0);
+    } else if (i < 5) {
+      snake_move(0,1);
+    } else if (i < 7) {
+      snake_move(-1, 0);
+    } else {
+      snake_move(0, -1);
+    }
     draw_everything(win);
     wrefresh(win);
+
+    i++;
   }
+
+  draw_everything(win);
+  wrefresh(win);
 
   getch();
   endwin();
