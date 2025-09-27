@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <ncurses.h>
+#include <unistd.h>
 
 struct Node {
   int x, y;
@@ -36,6 +37,15 @@ void draw_everything(WINDOW* win) {
   }
 }
 
+void move_snake() {
+  struct Node* current = head;
+  while(current != NULL) {
+    current->x = current->x+1;
+
+    current = current->next;
+  }
+}
+
 int main() {
   initscr();
   noecho();
@@ -51,6 +61,18 @@ int main() {
   draw_everything(win);
 
   //refresh();  // draw stdscr background
+  wrefresh(win);
+
+  // adding the body logic
+  usleep(500000);
+  add_segment(9,7);
+  draw_everything(win);
+  wrefresh(win);
+
+  // moving logic
+  usleep(500000);
+  move_snake();
+  draw_everything(win);
   wrefresh(win);
 
   getch();
