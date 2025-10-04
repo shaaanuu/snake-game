@@ -17,22 +17,32 @@ int temp_x, temp_y;
 int first;
 int apple_x = 35, apple_y = 10;
 int score = 0;
+int grow = 0;
 
 void add_segment(int x, int y) {
   new_node = malloc(sizeof(struct Node));
 
   new_node->x = x;
   new_node->y = y;
-  new_node->next = head;
 
-  head = new_node;
+  new_node->next = NULL;
+
+  if (!head) {
+    head = new_node;
+    return;
+  }
+
+  current = head;
+  while (current->next != NULL) current = current->next;
+  current->next = new_node;
+
 }
 
 void init_snake() {
-  add_segment(5, 7);
-  add_segment(6, 7);
-  add_segment(7, 7);
   add_segment(8, 7);
+  add_segment(7, 7);
+  add_segment(6, 7);
+  add_segment(5, 7);
 }
 
 void draw_everything(WINDOW* win) {
@@ -50,8 +60,8 @@ void draw_everything(WINDOW* win) {
 
     // When snake eats the apple
     if(current->x == apple_x && current->y == apple_y){
+      grow = 1;
       score++;
-
       apple_x = rand() % (WIDTH - 2) + 1;
       apple_y = rand() % (HEIGHT - 2) + 1;
     };
@@ -84,6 +94,11 @@ void snake_move(int x,int y){
         old_y = temp_y;
 
         current = current->next;
+    }
+
+    if(grow) {
+      add_segment(old_x, old_y);
+      grow = 0;
     }
 }
 
