@@ -16,6 +16,7 @@ int old_x, old_y;
 int temp_x, temp_y;
 int first;
 int apple_x = 35, apple_y = 10;
+int score = 0;
 
 void add_segment(int x, int y) {
   new_node = malloc(sizeof(struct Node));
@@ -39,7 +40,7 @@ void draw_everything(WINDOW* win) {
   box(win, 0, 0);
 
   mvwprintw(win, apple_y, apple_x, "*");
-  mvprintw(0, 0, "x:%d y:%d", apple_x, apple_y, win);
+  mvprintw(0, 15, "Score: %d", score, win);
 
   current = head;
   first = 1;
@@ -49,6 +50,8 @@ void draw_everything(WINDOW* win) {
 
     // When snake eats the apple
     if(current->x == apple_x && current->y == apple_y){
+      score++;
+
       apple_x = rand() % (WIDTH - 2) + 1;
       apple_y = rand() % (HEIGHT - 2) + 1;
     };
