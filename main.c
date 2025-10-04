@@ -47,9 +47,10 @@ void draw_everything(WINDOW* win) {
     // mvwaddch(WINDOW *win, int y, int x, const chtype ch);
     mvwaddch(win, current->y, current->x, first ? '@' : 'o');
 
+    // When snake eats the apple
     if(current->x == apple_x && current->y == apple_y){
-      apple_x = rand() % WIDTH;
-      apple_y = rand() % HEIGHT;
+      apple_x = rand() % (WIDTH - 2) + 1;
+      apple_y = rand() % (HEIGHT - 2) + 1;
     };
 
     current = current->next;
