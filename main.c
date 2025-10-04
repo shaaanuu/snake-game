@@ -2,6 +2,10 @@
 #include <stdlib.h>
 #include <ncurses.h>
 #include <unistd.h>
+#include <time.h>
+
+#define WIDTH 40
+#define HEIGHT 20
 
 struct Node {
   int x, y;
@@ -11,6 +15,7 @@ struct Node {
 int old_x, old_y;
 int temp_x, temp_y;
 int first;
+int apple_x = 35, apple_y = 10;
 
 void add_segment(int x, int y) {
   new_node = malloc(sizeof(struct Node));
@@ -33,14 +38,24 @@ void draw_everything(WINDOW* win) {
   wclear(win);
   box(win, 0, 0);
 
+  mvwprintw(win, apple_y, apple_x, "*");
+  mvprintw(0, 0, "x:%d y:%d", apple_x, apple_y, win);
+
   current = head;
   first = 1;
   while(current != NULL) {
     // mvwaddch(WINDOW *win, int y, int x, const chtype ch);
     mvwaddch(win, current->y, current->x, first ? '@' : 'o');
+
+    if(current->x == apple_x && current->y == apple_y){
+      apple_x = rand() % WIDTH;
+      apple_y = rand() % HEIGHT;
+    };
+
     current = current->next;
     first = 0;
   }
+
 }
 
 void snake_move(int x,int y){
@@ -49,7 +64,7 @@ void snake_move(int x,int y){
     old_x = current->x;
     old_y = current->y;
 
-    current->x += x; 
+    current->x += x;
     current->y += y;
 
     current = current->next;
@@ -76,8 +91,9 @@ int main() {
   cbreak();
   refresh();
   nodelay(stdscr, TRUE);
+  srand(time(NULL));
 
-  WINDOW *win = newwin(20, 50, 1, 1);
+  WINDOW *win = newwin(HEIGHT, WIDTH, 1, 1);
   init_snake();
   draw_everything(win);
   wrefresh(win);
@@ -85,7 +101,7 @@ int main() {
   // moving logic
   int dx = 1, dy = 0;
   while(true) {
-    usleep(500000);
+    usleep(350000);
 
     int ch = getch();
     switch(ch) {
@@ -95,9 +111,10 @@ int main() {
       case KEY_RIGHT: dx=1; dy=0;  break;
       case 'q': endwin(); exit(0); break;
     }
-   
+
     snake_move(dx, dy);
     draw_everything(win);
+
     wrefresh(win);
   }
 
@@ -106,9 +123,6 @@ int main() {
 
   getch();
   endwin();
-  
+
   return 0;
 }
-
-
-
