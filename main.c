@@ -18,6 +18,7 @@ int first;
 int apple_x = 35, apple_y = 10;
 int score = 0;
 int grow = 0;
+int game_over = 0;
 
 void add_segment(int x, int y) {
   new_node = malloc(sizeof(struct Node));
@@ -119,8 +120,8 @@ void check_collision() {
          current->y == (HEIGHT - 1) 
         )
     ){
-      endwin();
-      exit(0);
+      game_over = 1;
+      return;
     }
     current = current->next;
   }
@@ -144,7 +145,7 @@ int main() {
 
   // moving logic
   int dx = 1, dy = 0;
-  while(true) {
+  while(!game_over) {
     usleep(350000);
 
     int ch = getch();
@@ -153,7 +154,7 @@ int main() {
       case KEY_DOWN: dx=0; dy=1;  break;
       case KEY_LEFT: dx=-1; dy=0; break;
       case KEY_RIGHT: dx=1; dy=0;  break;
-      case 'q': endwin(); exit(0); break;
+      case 'q': game_over=1; break;
     }
 
     snake_move(dx, dy);
@@ -166,7 +167,7 @@ int main() {
   getch();
   endwin();
 
-  printf("Game Over. Score: %d", score);
+  printf("Game Over. Score: %d\n", score);
 
   return 0;
 }
