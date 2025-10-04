@@ -55,6 +55,16 @@ void draw_everything(WINDOW* win) {
   current = head;
   first = 1;
   while(current != NULL) {
+    if(
+        current->x == 0 || 
+        current->y == 0 ||
+        current->x == (WIDTH - 1) ||
+        current->y == (HEIGHT - 1)
+    ) {
+      endwin();
+      exit(0);
+    }
+
     // mvwaddch(WINDOW *win, int y, int x, const chtype ch);
     mvwaddch(win, current->y, current->x, first ? '@' : 'o');
 
