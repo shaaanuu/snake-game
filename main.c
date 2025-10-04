@@ -55,16 +55,6 @@ void draw_everything(WINDOW* win) {
   current = head;
   first = 1;
   while(current != NULL) {
-    if(
-        current->x == 0 || 
-        current->y == 0 ||
-        current->x == (WIDTH - 1) ||
-        current->y == (HEIGHT - 1)
-    ) {
-      endwin();
-      exit(0);
-    }
-
     // mvwaddch(WINDOW *win, int y, int x, const chtype ch);
     mvwaddch(win, current->y, current->x, first ? '@' : 'o');
 
@@ -112,6 +102,31 @@ void snake_move(int x,int y){
     }
 }
 
+void check_collision() {
+  current = head->next;
+  while(current != NULL){
+    if(
+        // eating itself
+        (
+          current->x == head->x && 
+          current->y == head->y
+        ) ||
+        // collission with wall
+        (
+         current->x == 0 ||
+         current->y == 0 ||
+         current->x == (WIDTH - 1) ||
+         current->y == (HEIGHT - 1) 
+        )
+    ){
+      endwin();
+      exit(0);
+    }
+    current = current->next;
+  }
+}
+
+
 int main() {
   initscr();
   noecho();
@@ -143,15 +158,15 @@ int main() {
 
     snake_move(dx, dy);
     draw_everything(win);
+    check_collision();
 
     wrefresh(win);
   }
 
-  draw_everything(win);
-  wrefresh(win);
-
   getch();
   endwin();
+
+  printf("Game Over. Score: %d", score);
 
   return 0;
 }
