@@ -167,6 +167,13 @@ int main() {
   getch();
   endwin();
 
+  current = head;
+  while(current != NULL) {
+    new_node = current;
+    current = current->next;
+    free(new_node);
+  }
+
   printf("Game Over. Score: %d\n", score);
 
   return 0;
