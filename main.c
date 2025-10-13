@@ -165,6 +165,14 @@ int main() {
     wrefresh(win);
   }
 
+  wclear(win);
+  box(win, 0, 0);
+  mvwprintw(win, (HEIGHT / 2) - 1, (WIDTH - 10) / 2, "GAME OVER!");
+  mvwprintw(win, HEIGHT/2, (WIDTH - 8) / 2, "Score: %d", score);
+  wrefresh(win);
+
+  wgetch(win);
+
   getch();
   endwin();
 
@@ -174,8 +182,6 @@ int main() {
     current = current->next;
     free(new_node);
   }
-
-  printf("\033[1;31mGAME OVER! Score: %d\033[0m\n", score); 
 
   return 0;
 }
