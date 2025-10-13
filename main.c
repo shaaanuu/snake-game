@@ -51,7 +51,8 @@ void draw_everything(WINDOW* win) {
   box(win, 0, 0);
 
   mvwprintw(win, apple_y, apple_x, "*");
-  mvprintw(0, 15, "Score: %d", score, win);
+ 
+  mvprintw(0, 15, "Score: %d", score);
 
   current = head;
   first = 1;
@@ -146,7 +147,7 @@ int main() {
   // moving logic
   int dx = 1, dy = 0;
   while(!game_over) {
-    usleep(350000);
+    usleep(200000);
 
     int ch = getch();
     switch(ch) {
@@ -174,7 +175,7 @@ int main() {
     free(new_node);
   }
 
-  printf("Game Over. Score: %d\n", score);
+  printf("\033[1;31mGAME OVER! Score: %d\033[0m\n", score); 
 
   return 0;
 }
